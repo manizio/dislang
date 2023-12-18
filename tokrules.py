@@ -3,7 +3,8 @@ import ply.lex as lex
 reserved = {
     'if'    : 'IF',
     'else'  : 'ELSE',
-    'while' : 'WHILE'
+    'while' : 'WHILE',
+    'print' : 'PRINT'
 }
 
 tokens = [
@@ -28,8 +29,7 @@ t_EQUALS = r'<-'
 
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
-    # t.type = reserved.get(t.value, 'ID')
-    t.value = t.value
+    t.type = reserved.get(t.value, 'ID')
     return t
 
 def t_NUMBER(t):
