@@ -9,23 +9,26 @@ reserved = {
 
 tokens = [
     'ID',
-    'NUMBER',
-    'PLUS'  ,
-    'MINUS' ,
-    'TIMES' ,
-    'DIVIDE',
-    'LPAREN',
-    'RPAREN',
-    'EQUALS'
+    'NUMBER', 'PLUS', 'MINUS', 'TIMES', 'DIVIDE', # math
+    'LPAREN', 'RPAREN', 'COLON', # symbols
+    'EQUALS', # <- | possivelmente mudar o nome desse token
+    'GREATER', 'LESS', 'GREAT_EQ', 'LESS_EQ', 'EQUAL_EQ', 'DIFF' # relation
 ] + list(reserved.values())
 
-t_PLUS   = r'\+'
-t_MINUS  = r'-'
-t_TIMES  = r'\*'
-t_DIVIDE = r'/'
-t_LPAREN = r'\('
-t_RPAREN = r'\)'
-t_EQUALS = r'<-'
+t_PLUS       = r'\+'
+t_MINUS      = r'-'
+t_TIMES      = r'\*'
+t_DIVIDE     = r'/'
+t_LPAREN     = r'\('
+t_RPAREN     = r'\)'
+t_EQUALS     = r'<-'
+t_COLON      = r':'
+t_GREATER    = r'>'
+t_LESS       = r'<'
+t_GREAT_EQ   = r'>='
+t_LESS_EQ    = r'<='
+t_EQUAL_EQ   = r'='
+t_DIFF       = r'!='
 
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
