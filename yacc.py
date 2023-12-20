@@ -9,25 +9,34 @@ def p_statement(p):
     '''statement : statement statement
                  | variable_declaration
                  | expression
-                 | logic_expression
-                 | print_statement
-                 | loop_statement
                  | if_statement
+                 | logic_expression
+                 | loop_statement
+                 | print_statement
     '''
-
+    p[0] = p[1]
     pass
 
 def p_if_statement(p):
-    'if_statement : IF LPAREN logic_expression RPAREN COLON statement'
+    'if_statement : IF LPAREN logic_expression RPAREN COLON statement ENDIF'
     # FIX: statement é executado mesmo quando a condição é falsa
 
-    if str(p[3]) == 'True':
-        p[0] = p[6]
+    # p[0] = ('if', p[3], p[6])
+
+    print(f'if {p[3]}: {p[6]}')
+
+    # if str(p[3]) == 'True':
+    #     p[0] = p[6]
 
 def p_loop_statement(p):
-    'loop_statement : WHILE LPAREN logic_expression RPAREN COLON statement'
+    '''loop_statement : WHILE LPAREN logic_expression RPAREN COLON statement ENDWHILE'''
+    # '''loop_statement : WHILE LPAREN logic_expression RPAREN COLON statement ENDWHILE
+    #                   | FOR LPAREN variable_declaration logic_expression expression RPAREN COLON statement ENDFOR'''
     
-    pass
+    # p[0] = ('while', p[3], p[6])
+
+    print(f'while {p[3]}: {p[6]}')
+
     # while p[3]:
     #     p[0] = p[6]
 
@@ -40,24 +49,27 @@ def p_print_statement(p):
 def p_variable_declaration(p):
     'variable_declaration : ID EQUALS expression'
     symbol_table[p[1]] = p[3]
+    print(f"{p[1]} = {p[3]}")
+    
     pass
 
 def p_logic_expression(p):
     'logic_expression : factor operation factor'
     
+    p[0] = f'{p[1]} {p[2]} {p[3]}'
     # retorna True ou False
-    if p[2] == '>':
-        p[0] = p[1] > p[3]
-    elif p[2] == '<':
-        p[0] = p[1] < p[3]
-    elif p[2] == '>=':
-        p[0] = p[1] >= p[3]
-    elif p[2] == '<=':
-        p[0] = p[1] <= p[3]
-    elif p[2] == '=':
-        p[0] = p[1] == p[3]
-    elif p[2] == '!=':
-        p[0] = p[1] !=  p[3]
+    # if p[2] == '>':
+    #     p[0] = p[1] > p[3]
+    # elif p[2] == '<':
+    #     p[0] = p[1] < p[3]
+    # elif p[2] == '>=':
+    #     p[0] = p[1] >= p[3]
+    # elif p[2] == '<=':
+    #     p[0] = p[1] <= p[3]
+    # elif p[2] == '=':
+    #     p[0] = p[1] == p[3]
+    # elif p[2] == '!=':
+    #     p[0] = p[1] !=  p[3]
 
 def p_operation(p):
     'operation : rel_operation'
@@ -77,13 +89,15 @@ def p_expression(p):
                   | expression MINUS term'''
     
     if p[2] == '+':
-        p[0] = p[1] + p[3]
+        p[0] = f'{p[1]} + {p[3]}'
     elif p[2] == '-':
-        p[0] = p[1] - p[3]
+        p[0] = f'{p[1]} - {p[3]}'
 
 def p_expression_id(p):
     'expression : ID'
-    p[0] = symbol_table.get(p[1], None)
+
+    # p[0] = symbol_table.get(p[1], None)
+    p[0] = p[1]
 
 def p_expression_term(p):
     'expression : term'
@@ -95,9 +109,9 @@ def p_term(p):
             | term DIVIDE factor'''    
 
     if p[2] == '*':
-        p[0] = p[1] * p[3]
+        p[0] = f'{p[1]} * {p[3]}'
     elif p[2] == '/':
-        p[0] = p[1] / p[3]
+        p[0] = f'{p[1]} / {p[3]}'
 
 def p_term_factor(p):
     'term : factor'
@@ -117,7 +131,9 @@ def p_factor_id(p):
 def p_factor_expr(p):
     'factor : LPAREN expression RPAREN'
     
-    p[0] = p[2]
+    # print(f'({p[2]})')
+
+    p[0] = f'({p[2]})'
 
 def p_error(p):
 

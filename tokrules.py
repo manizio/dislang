@@ -1,10 +1,14 @@
 import ply.lex as lex
 
 reserved = {
-    'if'    : 'IF',
-    'else'  : 'ELSE',
-    'while' : 'WHILE',
-    'print' : 'PRINT'
+    'if'       : 'IF',
+    'endif'    : 'ENDIF',
+    'while'    : 'WHILE',
+    'endwhile' : 'ENDWHILE',
+    'for'      : 'FOR',
+    'endfor'   : 'ENDFOR',
+    'print'    : 'PRINT'
+
 }
 
 tokens = [
