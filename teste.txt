@@ -1,6 +1,12 @@
 a <- 10
 b <- a + 5
 c <- a / b
+d <- 'teste'
+s <- "teste"
+
+section h('192.168.0.1', 90)
+
+data d("/home/user/file.tar.gz")
 
 if (a < b):
     2 + 4

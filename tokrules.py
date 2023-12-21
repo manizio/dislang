@@ -7,16 +7,18 @@ reserved = {
     'endwhile' : 'ENDWHILE',
     'for'      : 'FOR',
     'endfor'   : 'ENDFOR',
-    'print'    : 'PRINT'
+    'print'    : 'PRINT',
+    'section'  : 'SECTION',
+    'data'     : 'DATA'
 
 }
 
 tokens = [
     'ID',
     'NUMBER', 'PLUS', 'MINUS', 'TIMES', 'DIVIDE', # math
-    'LPAREN', 'RPAREN', 'COLON', # symbols
+    'LPAREN', 'RPAREN', 'COLON', 'COMMA', 'STRING', 'DB_STRING', # symbols
     'EQUALS', # <- | possivelmente mudar o nome desse token
-    'GREATER', 'LESS', 'GREAT_EQ', 'LESS_EQ', 'EQUAL_EQ', 'DIFF' # relation
+    'GREATER', 'LESS', 'GREAT_EQ', 'LESS_EQ', 'EQUAL_EQ', 'DIFF', # relation
 ] + list(reserved.values())
 
 t_PLUS       = r'\+'
@@ -33,6 +35,9 @@ t_GREAT_EQ   = r'>='
 t_LESS_EQ    = r'<='
 t_EQUAL_EQ   = r'='
 t_DIFF       = r'!='
+t_COMMA      = r','
+t_STRING     = r'\'[ -~]*\''
+t_DB_STRING  = r'\"[ -~]*\"' 
 
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
@@ -70,6 +75,8 @@ lexer = lex.lex()
 if __name__ ==  "__main__":
     data = '''
     a <- 2
+    section h("192.168.0.1", 90)
+
     '''
 
     lexer.input(data)

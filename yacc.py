@@ -13,32 +13,41 @@ def p_statement(p):
                  | logic_expression
                  | loop_statement
                  | print_statement
+                 | section_statement
+                 | data_statement
     '''
     p[0] = p[1]
     pass
 
+def p_data_statement(p):
+    'data_statement : DATA ID LPAREN factor RPAREN'
+    print(f'''fd = open({p[4]}, 'r')\n{p[2]} = fd.read()''')
+    pass
+
+def p_section_statement(p):
+    '''section_statement : SECTION ID LPAREN factor COMMA factor RPAREN
+                         | SECTION ID LPAREN RPAREN'''
+
+    if len(p) > 5:   
+        print(f'''{p[2]} = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\n{p[2]}.connect(({p[4]}, {p[6]}))''')
+    else:
+        print(f'''{p[2]} = socket.socket(socket.AF_INET, socket.SOCK_STREAM)''')
+
+    pass
+
+
 def p_if_statement(p):
     'if_statement : IF LPAREN logic_expression RPAREN COLON statement ENDIF'
-    # FIX: statement é executado mesmo quando a condição é falsa
-
-    # p[0] = ('if', p[3], p[6])
 
     print(f'if {p[3]}: {p[6]}')
 
-    # if str(p[3]) == 'True':
-    #     p[0] = p[6]
 
 def p_loop_statement(p):
     '''loop_statement : WHILE LPAREN logic_expression RPAREN COLON statement ENDWHILE'''
     # '''loop_statement : WHILE LPAREN logic_expression RPAREN COLON statement ENDWHILE
     #                   | FOR LPAREN variable_declaration logic_expression expression RPAREN COLON statement ENDFOR'''
-    
-    # p[0] = ('while', p[3], p[6])
 
     print(f'while {p[3]}: {p[6]}')
-
-    # while p[3]:
-    #     p[0] = p[6]
 
 def p_print_statement(p):
     '''print_statement : PRINT LPAREN expression RPAREN
@@ -47,7 +56,8 @@ def p_print_statement(p):
     print(p[3])
 
 def p_variable_declaration(p):
-    'variable_declaration : ID EQUALS expression'
+    '''variable_declaration : ID EQUALS expression'''
+    
     symbol_table[p[1]] = p[3]
     print(f"{p[1]} = {p[3]}")
     
@@ -57,19 +67,6 @@ def p_logic_expression(p):
     'logic_expression : factor operation factor'
     
     p[0] = f'{p[1]} {p[2]} {p[3]}'
-    # retorna True ou False
-    # if p[2] == '>':
-    #     p[0] = p[1] > p[3]
-    # elif p[2] == '<':
-    #     p[0] = p[1] < p[3]
-    # elif p[2] == '>=':
-    #     p[0] = p[1] >= p[3]
-    # elif p[2] == '<=':
-    #     p[0] = p[1] <= p[3]
-    # elif p[2] == '=':
-    #     p[0] = p[1] == p[3]
-    # elif p[2] == '!=':
-    #     p[0] = p[1] !=  p[3]
 
 def p_operation(p):
     'operation : rel_operation'
@@ -123,10 +120,19 @@ def p_factor_num(p):
     
     p[0] = p[1]
 
+def p_factor_string(p):
+    'factor : STRING'
+    p[0] = p[1]
+
+def p_factor_db_string(p):
+    'factor : DB_STRING'
+    p[0] = p[1]
+
 def p_factor_id(p):
     'factor : ID'
 
     p[0] = symbol_table.get(p[1], None)
+
 
 def p_factor_expr(p):
     'factor : LPAREN expression RPAREN'
